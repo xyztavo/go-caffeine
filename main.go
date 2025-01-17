@@ -15,7 +15,7 @@ import (
 
 var (
 	duration = flag.Duration("t", 0, "Duration to prevent sleep (e.g. 1h, 30m, 5h). 0 means indefinitely")
-	version  = "1.0.1"
+	version  = "1.0.2"
 )
 
 func main() {
