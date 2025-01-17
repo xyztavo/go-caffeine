@@ -30,13 +30,13 @@ go-caffeine version
 ## Installation
 
 ```
-go install github.com/yourusername/go-caffeine@latest
+go install github.com/xyztavo/go-caffeine@latest
 ```
 
 ## Building from source
 
 ```
-git clone https://github.com/yourusername/go-caffeine.git
+git clone https://github.com/xyztavo/go-caffeine.git
 cd go-caffeine
 go build
 ```
