@@ -15,7 +15,7 @@ import (
 
 var (
 	duration = flag.Duration("t", 0, "Duration to prevent sleep (e.g. 1h, 30m, 5h). 0 means indefinitely")
-	version  = "1.0.0"
+	version  = "1.0.1"
 )
 
 func main() {
@@ -23,15 +23,15 @@ func main() {
 
 	// Print version if requested
 	if len(os.Args) > 1 && os.Args[1] == "version" {
-		fmt.Printf("go-caffeine version %s\n", version)
+		fmt.Printf("go-caffeine version %s ✨\n", version)
 		return
 	}
 
-	fmt.Printf("Starting go-caffeine (Press Ctrl+C to exit)\n")
+	fmt.Printf("Starting go-caffeine ☕ (Press Ctrl+C to exit)\n")
 	if *duration > 0 {
-		fmt.Printf("System will stay awake for %v\n", *duration)
+		fmt.Printf("System will stay awake for %v ⏰\n", *duration)
 	} else {
-		fmt.Println("System will stay awake indefinitely")
+		fmt.Println("System will stay awake indefinitely 🔋")
 	}
 
 	// Create and configure spinner
@@ -63,7 +63,7 @@ func main() {
 		if *duration > 0 {
 			select {
 			case <-sigChan:
-				fmt.Println("\nExiting go-caffeine...")
+				fmt.Println("\n👋 Exiting go-caffeine...")
 				return
 			case <-ticker.C:
 				keepAwake()
@@ -73,13 +73,13 @@ func main() {
 					s.Suffix = fmt.Sprintf(" Keeping system awake... %v remaining", remaining.Round(time.Second))
 				}
 			case <-timer.C:
-				fmt.Println("\nDuration expired, exiting go-caffeine...")
+				fmt.Println("\n⌛ Duration expired, exiting go-caffeine...")
 				return
 			}
 		} else {
 			select {
 			case <-sigChan:
-				fmt.Println("\nExiting go-caffeine...")
+				fmt.Println("\n👋 Exiting go-caffeine...")
 				return
 			case <-ticker.C:
 				keepAwake()

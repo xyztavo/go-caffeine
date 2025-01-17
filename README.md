@@ -1,15 +1,29 @@
-# go-caffeine
+# go-caffeine ☕
 
 A simple command-line utility to prevent your system from sleeping.
 
-## Features
+## Installation 🚀
 
-- Prevents system sleep/screen saver
-- Cross-platform support (Windows, macOS, Linux)
-- Optional duration timer
-- Visual spinner indicator
+```
+go install github.com/xyztavo/go-caffeine@latest
+```
 
-## Usage
+### Building from source
+
+```
+git clone https://github.com/xyztavo/go-caffeine.git
+cd go-caffeine
+go build
+```
+
+## Features ✨
+
+- 💪 Prevents system sleep/screen saver
+- 🌍 Cross-platform support (Windows, macOS, Linux)
+- ⏰ Optional duration timer
+- 🔄 Visual spinner indicator
+
+## Usage 📖
 
 Run indefinitely:
 ```
@@ -27,20 +41,6 @@ Check version:
 go-caffeine version
 ```
 
-## Installation
-
-```
-go install github.com/xyztavo/go-caffeine@latest
-```
-
-## Building from source
-
-```
-git clone https://github.com/xyztavo/go-caffeine.git
-cd go-caffeine
-go build
-```
-
-## License
+## License 📄
 
 MIT
