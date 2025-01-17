@@ -10,12 +10,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/briandowns/spinner"
+	"github.com/pterm/pterm"
 )
 
 var (
 	duration = flag.Duration("t", 0, "Duration to prevent sleep (e.g. 1h, 30m, 5h). 0 means indefinitely")
-	version  = "1.0.3"
+	version  = "1.0.4"
 )
 
 func main() {
@@ -34,15 +34,6 @@ func main() {
 		fmt.Println("System will stay awake indefinitely 🔋")
 	}
 
-	// Create and configure spinner
-	s := spinner.New(spinner.CharSets[11], 100*time.Millisecond)
-	s.Suffix = " Keeping system awake..."
-	s.Start()
-
-	// Set up channel to handle interrupt signal
-	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
-
 	// Create timer channel if duration is specified
 	var timer *time.Timer
 	var startTime time.Time
@@ -51,18 +42,27 @@ func main() {
 		startTime = time.Now()
 	}
 
+	// Create spinner
+	spinnerPrinter := pterm.DefaultSpinner.WithRemoveWhenDone(false)
+	spinnerPrinter.ShowTimer = false
+	spinner, _ := spinnerPrinter.Start("Keeping system awake...")
+
+	// Set up channel to handle interrupt signal
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+
 	// Start the keep-awake loop based on OS
 	keepAwake := getKeepAwakeFunc()
 	ticker := time.NewTicker(time.Second * 30)
 	updateTicker := time.NewTicker(time.Second)
 	defer ticker.Stop()
 	defer updateTicker.Stop()
-	defer s.Stop()
 
 	for {
 		if *duration > 0 {
 			select {
 			case <-sigChan:
+				spinner.Stop()
 				fmt.Println("\n👋 Exiting go-caffeine...")
 				return
 			case <-ticker.C:
@@ -70,15 +70,17 @@ func main() {
 			case <-updateTicker.C:
 				remaining := *duration - time.Since(startTime)
 				if remaining > 0 {
-					s.Suffix = fmt.Sprintf(" Keeping system awake... %v remaining", remaining.Round(time.Second))
+					spinner.UpdateText(fmt.Sprintf("Keeping system awake... %v remaining", remaining.Round(time.Second)))
 				}
 			case <-timer.C:
+				spinner.Stop()
 				fmt.Println("\n⌛ Duration expired, exiting go-caffeine...")
 				return
 			}
 		} else {
 			select {
 			case <-sigChan:
+				spinner.Stop()
 				fmt.Println("\n👋 Exiting go-caffeine...")
 				return
 			case <-ticker.C:
